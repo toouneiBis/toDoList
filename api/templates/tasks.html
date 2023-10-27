@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            Task List
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Task Title</th>
+                    <th>Task Description</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody id="taskList">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block more_js %}
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to fetch and display tasks
+        function fetchTasks() {
+            fetch('/tasks', {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(tasks => {
+                const taskList = document.getElementById('taskList');
+                taskList.innerHTML = ''; // Clear the current task list
+                tasks.forEach(task => {
+                    const row = document.createElement('tr');
+                    const taskTitle = document.createElement('td');
+                    taskTitle.textContent = task.title;
+                    // Apply a strike-through effect if the task is completed
+                    if (task.is_completed) {
+                        taskTitle.style.textDecoration = 'line-through';
+                    }
+                    const taskDescription = document.createElement('td');
+                    taskDescription.textContent = task.description;
+                    const actions = document.createElement('td');
+                    if (!task.is_completed) {
+                        // Create the "Complete" button only if the task is not completed
+                        const completeButton = document.createElement('button');
+                        completeButton.className = 'btn btn-success complete-button';
+                        completeButton.dataset.taskTitle = task.title;
+                        completeButton.textContent = 'Complete';
+                        actions.appendChild(completeButton);
+                    }
+                    // Always create the "Delete" button
+                    const deleteButton = document.createElement('button');
+                    deleteButton.className = 'btn btn-danger delete-button';
+                    deleteButton.dataset.taskTitle = task.title;
+                    deleteButton.textContent = 'Delete';
+                    actions.appendChild(deleteButton);
+                    row.appendChild(taskTitle);
+                    row.appendChild(taskDescription);
+                    row.appendChild(actions);
+                    taskList.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    
+        // Handle the Complete Task button click
+        function completeTask(taskTitle) {
+            fetch(`/tasks/${taskTitle}/complete`, {
+                method: 'PUT'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                fetchTasks(); // Reload the task list
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    
+        // Handle the Delete Task button click
+        function deleteTask(taskTitle) {
+            fetch(`/tasks/${taskTitle}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                fetchTasks(); // Reload the task list
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    
+        // Attach click event handlers to dynamically generated buttons
+        document.getElementById('taskList').addEventListener('click', function(event) {
+            const target = event.target;
+            if (target.classList.contains('complete-button')) {
+                completeTask(target.getAttribute('data-task-title'));
+            } else if (target.classList.contains('delete-button')) {
+                deleteTask(target.getAttribute('data-task-title'));
+            }
+        });
+    
+        // Fetch and display tasks when the page loads
+        fetchTasks();
+    });
+</script>
+
+
+{% endblock more_js %}
