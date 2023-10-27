@@ -29,3 +29,24 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     args.func(args)
+
+def list_tasks(args):
+    r = requests.get(f'{BASE_URL}/tasks')
+    tasks = r.json()
+    for task in tasks:
+        print(task)
+
+def complete_task(args):
+    r = requests.put(f'{BASE_URL}/tasks/{args.title}/complete')
+    print(r.json())
+```
+et identiquement ce code dans le `if __name__ == '__main__'`
+
+```
+    parser_list = subparsers.add_parser('list', help='List all tasks')
+    parser_list.set_defaults(func=list_tasks)
+
+    parser_complete = subparsers.add_parser('complete', help='Mark a task as complete')
+    parser_complete.add_argument('title', type=str, help='Title of the task to complete')
+    parser_complete.set_defaults(func=complete_task)
+
