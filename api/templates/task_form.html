@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Task Form -->
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    Add Task
+                </div>
+                <div class="card-body">
+                    <form id="taskForm">
+                        <div class="mb-3">
+                            <label for="taskTitle" class="form-label">Task Title</label>
+                            <input type="text" class="form-control" id="taskTitle" name="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="taskDescription" class="form-label">Task Description</label>
+                            <input type="text" class="form-control" id="taskDescription" name="description">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Task</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block more_js %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Define the task form
+        const taskForm = document.getElementById('taskForm');
+    
+        // Add an event listener to the form submission
+        taskForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            console.log('triggered')
+            // Create a data object with the form values
+            const formData = new FormData(taskForm);
+    
+            // Convert the data object to a JSON object
+            const taskData = {};
+            formData.forEach((value, key) => {
+                taskData[key] = value;
+            });
+    
+            // Send a POST request to add the task
+            fetch('/tasks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(taskData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response
+                console.log(data);
+                window.location.href = '/all-tasks';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+    </script>
+
+
+{% endblock more_js %}
+
+
+
