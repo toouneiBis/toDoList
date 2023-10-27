@@ -1,9 +1,10 @@
-```
+
 import json
 from flask_testing import TestCase
 from flask import Flask
 import api.routes as routes
 from models import TaskList
+
 
 class TestTasksRoutes(TestCase):
 
@@ -19,7 +20,8 @@ class TestTasksRoutes(TestCase):
     def test_add_task(self):
         response = self.client.post(
             '/tasks',
-            data=json.dumps({'title': 'Task 2', 'description': 'Description 2'}),
+            data=json.dumps(
+                {'title': 'Task 2', 'description': 'Description 2'}),
             content_type='application/json'
         )
         self.assert200(response)
@@ -34,10 +36,10 @@ class TestTasksRoutes(TestCase):
     def test_complete_task(self):
         response = self.client.put('/tasks/Task 1/complete')
         self.assert200(response)
-        self.assertEqual(response.get_json(), {'status': 'Task marked as completed'})
+        self.assertEqual(response.get_json(), {
+                         'status': 'Task marked as completed'})
 
     def test_delete_task(self):
         response = self.client.delete('/tasks/Task 1')
         self.assert200(response)
         self.assertEqual(response.get_json(), {'status': 'Task deleted'})
-```
