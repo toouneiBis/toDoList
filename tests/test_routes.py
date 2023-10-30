@@ -1,4 +1,3 @@
-
 import json
 from flask_testing import TestCase
 from flask import Flask
