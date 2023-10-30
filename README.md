@@ -13,6 +13,11 @@ python -m venv venv
 
 Once the venv created :
 
+
+```sh
+docker-compose up --build -d
+```
+
 ```sh
 source venv/bin/activate
 pip install -r requirements.txt
