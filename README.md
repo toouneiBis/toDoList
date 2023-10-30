@@ -2,6 +2,18 @@
 
 La version de python utilisé est : 3.8.10
 
+## Authors 
+
+    Louis Lemoine
+    Laurent Guyraud
+    Célia Giotti
+    Guillaume Piol
+
+#### Link Github
+
+    https://github.com/toouneiBis/toDoList
+
+
 ### Install dependencies
 
 Create a venv :
