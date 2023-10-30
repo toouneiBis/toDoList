@@ -45,3 +45,7 @@ python cli/main.py list
 python cli/main.py complete "Task Title"
 python cli/main.py delete "Task Title"
 ```
+
+### Use GUI 
+
+Run on http://127.0.0.1:5000
