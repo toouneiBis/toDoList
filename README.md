@@ -5,7 +5,7 @@ La version de python utilisé est : 3.8.10
 ## Authors 
 
     Louis Lemoine
-    Laurent Guyraud
+    Laurent Gayraud
     Célia Giotti
     Guillaume Piol
 
